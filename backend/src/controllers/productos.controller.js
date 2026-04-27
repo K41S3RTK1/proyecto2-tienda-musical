@@ -107,7 +107,47 @@ const crearProducto = async (req, res) => {
   }
 };
 
+const eliminarProducto = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const verificarQuery = `
+      SELECT * FROM producto
+      WHERE id_producto = $1;
+    `;
+    const verificarResult = await pool.query(verificarQuery, [id]);
+
+    if (verificarResult.rows.length === 0) {
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'El producto no existe.'
+      });
+    }
+
+    const deleteQuery = `
+      DELETE FROM producto
+      WHERE id_producto = $1
+      RETURNING *;
+    `;
+    const deleteResult = await pool.query(deleteQuery, [id]);
+
+    res.json({
+      ok: true,
+      mensaje: 'Producto eliminado correctamente.',
+      producto: deleteResult.rows[0]
+    });
+  } catch (error) {
+    console.error('Error al eliminar producto:', error);
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al eliminar producto',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   obtenerProductos,
-  crearProducto
+  crearProducto,
+  eliminarProducto
 };

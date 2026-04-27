@@ -18,6 +18,9 @@ async function cargarProductos() {
           <td>${producto.stock_actual}</td>
           <td>${producto.categoria}</td>
           <td>${producto.proveedor}</td>
+          <td>
+            <button onclick="eliminarProducto(${producto.id_producto})">Eliminar</button>
+          </td>
         `;
 
         tbody.appendChild(fila);
@@ -25,7 +28,7 @@ async function cargarProductos() {
     } else {
       tbody.innerHTML = `
         <tr>
-          <td colspan="7">No se pudieron cargar los productos.</td>
+          <td colspan="8">No se pudieron cargar los productos.</td>
         </tr>
       `;
     }
@@ -35,7 +38,7 @@ async function cargarProductos() {
     const tbody = document.querySelector('#tabla-productos tbody');
     tbody.innerHTML = `
       <tr>
-        <td colspan="7">Ocurrió un error al cargar los productos.</td>
+        <td colspan="8">Ocurrió un error al cargar los productos.</td>
       </tr>
     `;
   }
@@ -66,7 +69,14 @@ async function crearProducto(event) {
       body: JSON.stringify(producto)
     });
 
-    const data = await respuesta.json();
+    const texto = await respuesta.text();
+
+    let data;
+    try {
+      data = JSON.parse(texto);
+    } catch (e) {
+      throw new Error(`La respuesta no vino en JSON. Respuesta: ${texto}`);
+    }
 
     if (data.ok) {
       mensaje.textContent = data.mensaje;
@@ -74,12 +84,43 @@ async function crearProducto(event) {
       document.getElementById('form-producto').reset();
       cargarProductos();
     } else {
-      mensaje.textContent = data.mensaje;
+      mensaje.textContent = data.mensaje || 'No se pudo crear el producto.';
       mensaje.style.color = 'red';
     }
   } catch (error) {
     console.error('Error al crear producto:', error);
-    mensaje.textContent = 'Ocurrió un error al crear el producto.';
+    mensaje.textContent = error.message;
+    mensaje.style.color = 'red';
+  }
+}
+
+async function eliminarProducto(id) {
+  const confirmar = confirm('¿Deseas eliminar este producto?');
+
+  if (!confirmar) {
+    return;
+  }
+
+  const mensaje = document.getElementById('mensaje');
+
+  try {
+    const respuesta = await fetch(`/productos/${id}`, {
+      method: 'DELETE'
+    });
+
+    const data = await respuesta.json();
+
+    if (data.ok) {
+      mensaje.textContent = data.mensaje;
+      mensaje.style.color = 'green';
+      cargarProductos();
+    } else {
+      mensaje.textContent = data.mensaje || 'No se pudo eliminar el producto.';
+      mensaje.style.color = 'red';
+    }
+  } catch (error) {
+    console.error('Error al eliminar producto:', error);
+    mensaje.textContent = 'Ocurrió un error al eliminar el producto.';
     mensaje.style.color = 'red';
   }
 }

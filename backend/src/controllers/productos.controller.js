@@ -33,6 +33,81 @@ const obtenerProductos = async (req, res) => {
   }
 };
 
+const crearProducto = async (req, res) => {
+  try {
+    const {
+      nombre,
+      descripcion,
+      marca,
+      precio_venta,
+      stock_actual,
+      stock_minimo,
+      id_categoria,
+      id_proveedor
+    } = req.body;
+
+    if (
+      !nombre ||
+      !marca ||
+      !precio_venta ||
+      stock_actual === undefined ||
+      stock_minimo === undefined ||
+      !id_categoria ||
+      !id_proveedor
+    ) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: 'Todos los campos obligatorios deben completarse.'
+      });
+    }
+
+    if (
+      Number(precio_venta) <= 0 ||
+      Number(stock_actual) < 0 ||
+      Number(stock_minimo) < 0
+    ) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: 'Verifica precio y stock. No pueden llevar valores inválidos.'
+      });
+    }
+
+    const query = `
+      INSERT INTO producto
+      (nombre, descripcion, marca, precio_venta, stock_actual, stock_minimo, id_categoria, id_proveedor)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      RETURNING *;
+    `;
+
+    const values = [
+      nombre,
+      descripcion || null,
+      marca,
+      precio_venta,
+      stock_actual,
+      stock_minimo,
+      id_categoria,
+      id_proveedor
+    ];
+
+    const result = await pool.query(query, values);
+
+    res.status(201).json({
+      ok: true,
+      mensaje: 'Producto creado correctamente.',
+      producto: result.rows[0]
+    });
+  } catch (error) {
+    console.error('Error al crear producto:', error);
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al crear producto',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
-  obtenerProductos
+  obtenerProductos,
+  crearProducto
 };

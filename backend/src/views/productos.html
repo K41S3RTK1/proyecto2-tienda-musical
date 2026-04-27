@@ -11,6 +11,22 @@
 
   <p><a href="/">Volver al inicio</a></p>
 
+  <h2>Agregar producto</h2>
+
+  <form id="form-producto">
+    <input type="text" id="nombre" placeholder="Nombre" required>
+    <input type="text" id="descripcion" placeholder="Descripción">
+    <input type="text" id="marca" placeholder="Marca" required>
+    <input type="number" id="precio_venta" placeholder="Precio" step="0.01" required>
+    <input type="number" id="stock_actual" placeholder="Stock actual" required>
+    <input type="number" id="stock_minimo" placeholder="Stock mínimo" required>
+    <input type="number" id="id_categoria" placeholder="ID categoría" required>
+    <input type="number" id="id_proveedor" placeholder="ID proveedor" required>
+    <button type="submit">Guardar producto</button>
+  </form>
+
+  <p id="mensaje"></p>
+
   <table border="1" cellpadding="10" cellspacing="0" id="tabla-productos">
     <thead>
       <tr>

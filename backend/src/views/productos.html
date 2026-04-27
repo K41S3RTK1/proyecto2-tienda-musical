@@ -11,9 +11,11 @@
 
   <p><a href="/">Volver al inicio</a></p>
 
-  <h2>Agregar producto</h2>
+  <h2 id="titulo-formulario">Agregar producto</h2>
 
   <form id="form-producto">
+    <input type="hidden" id="id_producto">
+
     <input type="text" id="nombre" placeholder="Nombre" required>
     <input type="text" id="descripcion" placeholder="Descripción">
     <input type="text" id="marca" placeholder="Marca" required>
@@ -22,7 +24,9 @@
     <input type="number" id="stock_minimo" placeholder="Stock mínimo" required>
     <input type="number" id="id_categoria" placeholder="ID categoría" required>
     <input type="number" id="id_proveedor" placeholder="ID proveedor" required>
-    <button type="submit">Guardar producto</button>
+
+    <button type="submit" id="btn-guardar">Guardar producto</button>
+    <button type="button" id="btn-cancelar" style="display: none;">Cancelar edición</button>
   </form>
 
   <p id="mensaje"></p>

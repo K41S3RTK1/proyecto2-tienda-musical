@@ -6,9 +6,13 @@ const obtenerProductos = async (req, res) => {
       SELECT 
         p.id_producto,
         p.nombre AS producto,
+        p.descripcion,
         p.marca,
         p.precio_venta,
         p.stock_actual,
+        p.stock_minimo,
+        p.id_categoria,
+        p.id_proveedor,
         c.nombre AS categoria,
         pr.nombre AS proveedor
       FROM producto p
@@ -107,6 +111,102 @@ const crearProducto = async (req, res) => {
   }
 };
 
+const actualizarProducto = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      nombre,
+      descripcion,
+      marca,
+      precio_venta,
+      stock_actual,
+      stock_minimo,
+      id_categoria,
+      id_proveedor
+    } = req.body;
+
+    if (
+      !nombre ||
+      !marca ||
+      !precio_venta ||
+      stock_actual === undefined ||
+      stock_minimo === undefined ||
+      !id_categoria ||
+      !id_proveedor
+    ) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: 'Todos los campos obligatorios deben completarse.'
+      });
+    }
+
+    if (
+      Number(precio_venta) <= 0 ||
+      Number(stock_actual) < 0 ||
+      Number(stock_minimo) < 0
+    ) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: 'Verifica precio y stock. No pueden llevar valores inválidos.'
+      });
+    }
+
+    const verificarQuery = `
+      SELECT * FROM producto
+      WHERE id_producto = $1;
+    `;
+    const verificarResult = await pool.query(verificarQuery, [id]);
+
+    if (verificarResult.rows.length === 0) {
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'El producto no existe.'
+      });
+    }
+
+    const updateQuery = `
+      UPDATE producto
+      SET nombre = $1,
+          descripcion = $2,
+          marca = $3,
+          precio_venta = $4,
+          stock_actual = $5,
+          stock_minimo = $6,
+          id_categoria = $7,
+          id_proveedor = $8
+      WHERE id_producto = $9
+      RETURNING *;
+    `;
+
+    const values = [
+      nombre,
+      descripcion || null,
+      marca,
+      precio_venta,
+      stock_actual,
+      stock_minimo,
+      id_categoria,
+      id_proveedor,
+      id
+    ];
+
+    const result = await pool.query(updateQuery, values);
+
+    res.json({
+      ok: true,
+      mensaje: 'Producto actualizado correctamente.',
+      producto: result.rows[0]
+    });
+  } catch (error) {
+    console.error('Error al actualizar producto:', error);
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al actualizar producto',
+      error: error.message
+    });
+  }
+};
+
 const eliminarProducto = async (req, res) => {
   try {
     const { id } = req.params;
@@ -149,5 +249,6 @@ const eliminarProducto = async (req, res) => {
 module.exports = {
   obtenerProductos,
   crearProducto,
+  actualizarProducto,
   eliminarProducto
 };

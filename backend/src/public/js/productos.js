@@ -1,3 +1,5 @@
+let productoEnEdicion = null;
+
 async function cargarProductos() {
   try {
     const respuesta = await fetch('/productos');
@@ -19,6 +21,7 @@ async function cargarProductos() {
           <td>${producto.categoria}</td>
           <td>${producto.proveedor}</td>
           <td>
+            <button onclick='editarProducto(${JSON.stringify(producto)})'>Editar</button>
             <button onclick="eliminarProducto(${producto.id_producto})">Eliminar</button>
           </td>
         `;
@@ -44,7 +47,34 @@ async function cargarProductos() {
   }
 }
 
-async function crearProducto(event) {
+function editarProducto(producto) {
+  productoEnEdicion = producto.id_producto;
+
+  document.getElementById('id_producto').value = producto.id_producto;
+  document.getElementById('nombre').value = producto.producto;
+  document.getElementById('descripcion').value = producto.descripcion || '';
+  document.getElementById('marca').value = producto.marca;
+  document.getElementById('precio_venta').value = producto.precio_venta;
+  document.getElementById('stock_actual').value = producto.stock_actual;
+  document.getElementById('stock_minimo').value = producto.stock_minimo;
+  document.getElementById('id_categoria').value = producto.id_categoria;
+  document.getElementById('id_proveedor').value = producto.id_proveedor;
+
+  document.getElementById('titulo-formulario').textContent = 'Editar producto';
+  document.getElementById('btn-guardar').textContent = 'Actualizar producto';
+  document.getElementById('btn-cancelar').style.display = 'inline-block';
+}
+
+function cancelarEdicion() {
+  productoEnEdicion = null;
+  document.getElementById('form-producto').reset();
+  document.getElementById('id_producto').value = '';
+  document.getElementById('titulo-formulario').textContent = 'Agregar producto';
+  document.getElementById('btn-guardar').textContent = 'Guardar producto';
+  document.getElementById('btn-cancelar').style.display = 'none';
+}
+
+async function guardarProducto(event) {
   event.preventDefault();
 
   const mensaje = document.getElementById('mensaje');
@@ -61,8 +91,16 @@ async function crearProducto(event) {
   };
 
   try {
-    const respuesta = await fetch('/productos', {
-      method: 'POST',
+    let url = '/productos';
+    let method = 'POST';
+
+    if (productoEnEdicion) {
+      url = `/productos/${productoEnEdicion}`;
+      method = 'PUT';
+    }
+
+    const respuesta = await fetch(url, {
+      method,
       headers: {
         'Content-Type': 'application/json'
       },
@@ -81,14 +119,14 @@ async function crearProducto(event) {
     if (data.ok) {
       mensaje.textContent = data.mensaje;
       mensaje.style.color = 'green';
-      document.getElementById('form-producto').reset();
+      cancelarEdicion();
       cargarProductos();
     } else {
-      mensaje.textContent = data.mensaje || 'No se pudo crear el producto.';
+      mensaje.textContent = data.mensaje || 'No se pudo guardar el producto.';
       mensaje.style.color = 'red';
     }
   } catch (error) {
-    console.error('Error al crear producto:', error);
+    console.error('Error al guardar producto:', error);
     mensaje.textContent = error.message;
     mensaje.style.color = 'red';
   }
@@ -125,6 +163,7 @@ async function eliminarProducto(id) {
   }
 }
 
-document.getElementById('form-producto').addEventListener('submit', crearProducto);
+document.getElementById('form-producto').addEventListener('submit', guardarProducto);
+document.getElementById('btn-cancelar').addEventListener('click', cancelarEdicion);
 
 cargarProductos();

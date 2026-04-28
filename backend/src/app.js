@@ -4,6 +4,7 @@ const pool = require('./config/db');
 const productosRoutes = require('./routes/productos.routes');
 const clientesRoutes = require('./routes/clientes.routes');
 const reportesRoutes = require('./routes/reportes.routes');
+const ventasRoutes = require('./routes/ventas.routes');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const app = express();
@@ -29,6 +30,10 @@ app.get('/reportes-page', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'reportes.html'));
 });
 
+app.get('/ventas-page', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'ventas.html'));
+});
+
 app.get('/test-db', async (req, res) => {
   try {
     const result = await pool.query('SELECT NOW() AS fecha_actual');
@@ -50,6 +55,7 @@ app.get('/test-db', async (req, res) => {
 app.use('/productos', productosRoutes);
 app.use('/clientes', clientesRoutes);
 app.use('/reportes', reportesRoutes);
+app.use('/ventas', ventasRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);

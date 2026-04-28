@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ventas - Tienda Musical</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <h1>Registrar venta</h1>
+
+  <p><a href="/">Volver al inicio</a></p>
+
+  <form id="form-venta">
+    <input type="number" id="id_cliente" placeholder="ID cliente" required>
+    <input type="number" id="id_empleado" placeholder="ID empleado" required>
+    <input type="number" id="id_producto" placeholder="ID producto" required>
+    <input type="number" id="cantidad" placeholder="Cantidad" required>
+    
+    <select id="metodo_pago" required>
+      <option value="">Seleccione método de pago</option>
+      <option value="Efectivo">Efectivo</option>
+      <option value="Tarjeta">Tarjeta</option>
+      <option value="Transferencia">Transferencia</option>
+    </select>
+
+    <button type="submit">Registrar venta</button>
+  </form>
+
+  <p id="mensaje"></p>
+
+  <h2>Último resultado</h2>
+  <pre id="resultado-venta"></pre>
+
+  <script src="/js/ventas.js"></script>
+</body>
+</html>

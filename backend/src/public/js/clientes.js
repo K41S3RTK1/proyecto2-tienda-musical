@@ -16,6 +16,9 @@ async function cargarClientes() {
           <td>${cliente.apellido}</td>
           <td>${cliente.telefono}</td>
           <td>${cliente.correo}</td>
+          <td>
+            <button onclick="eliminarCliente(${cliente.id_cliente})">Eliminar</button>
+          </td>
         `;
 
         tbody.appendChild(fila);
@@ -23,7 +26,7 @@ async function cargarClientes() {
     } else {
       tbody.innerHTML = `
         <tr>
-          <td colspan="5">No se pudieron cargar los clientes.</td>
+          <td colspan="6">No se pudieron cargar los clientes.</td>
         </tr>
       `;
     }
@@ -33,7 +36,7 @@ async function cargarClientes() {
     const tbody = document.querySelector('#tabla-clientes tbody');
     tbody.innerHTML = `
       <tr>
-        <td colspan="5">Ocurrió un error al cargar los clientes.</td>
+        <td colspan="6">Ocurrió un error al cargar los clientes.</td>
       </tr>
     `;
   }
@@ -74,6 +77,37 @@ async function crearCliente(event) {
   } catch (error) {
     console.error('Error al crear cliente:', error);
     mensaje.textContent = 'Ocurrió un error al crear el cliente.';
+    mensaje.style.color = 'red';
+  }
+}
+
+async function eliminarCliente(id) {
+  const confirmar = confirm('¿Deseas eliminar este cliente?');
+
+  if (!confirmar) {
+    return;
+  }
+
+  const mensaje = document.getElementById('mensaje');
+
+  try {
+    const respuesta = await fetch(`/clientes/${id}`, {
+      method: 'DELETE'
+    });
+
+    const data = await respuesta.json();
+
+    if (data.ok) {
+      mensaje.textContent = data.mensaje;
+      mensaje.style.color = 'green';
+      cargarClientes();
+    } else {
+      mensaje.textContent = data.mensaje || 'No se pudo eliminar el cliente.';
+      mensaje.style.color = 'red';
+    }
+  } catch (error) {
+    console.error('Error al eliminar cliente:', error);
+    mensaje.textContent = 'Ocurrió un error al eliminar el cliente.';
     mensaje.style.color = 'red';
   }
 }

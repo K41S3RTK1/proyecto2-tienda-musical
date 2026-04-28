@@ -72,7 +72,47 @@ const crearCliente = async (req, res) => {
   }
 };
 
+const eliminarCliente = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const verificarQuery = `
+      SELECT * FROM cliente
+      WHERE id_cliente = $1;
+    `;
+    const verificarResult = await pool.query(verificarQuery, [id]);
+
+    if (verificarResult.rows.length === 0) {
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'El cliente no existe.'
+      });
+    }
+
+    const deleteQuery = `
+      DELETE FROM cliente
+      WHERE id_cliente = $1
+      RETURNING *;
+    `;
+    const deleteResult = await pool.query(deleteQuery, [id]);
+
+    res.json({
+      ok: true,
+      mensaje: 'Cliente eliminado correctamente.',
+      cliente: deleteResult.rows[0]
+    });
+  } catch (error) {
+    console.error('Error al eliminar cliente:', error);
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al eliminar cliente',
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   obtenerClientes,
-  crearCliente
+  crearCliente,
+  eliminarCliente
 };

@@ -11,14 +11,16 @@
 
   <p><a href="/">Volver al inicio</a></p>
 
-  <h2>Agregar cliente</h2>
+  <h2 id="titulo-formulario">Agregar cliente</h2>
 
   <form id="form-cliente">
+    <input type="hidden" id="id_cliente">
     <input type="text" id="nombre" placeholder="Nombre" required>
     <input type="text" id="apellido" placeholder="Apellido" required>
     <input type="text" id="telefono" placeholder="Teléfono" required>
     <input type="email" id="correo" placeholder="Correo" required>
-    <button type="submit">Guardar cliente</button>
+    <button type="submit" id="btn-guardar">Guardar cliente</button>
+    <button type="button" id="btn-cancelar" style="display: none;">Cancelar edición</button>
   </form>
 
   <p id="mensaje"></p>

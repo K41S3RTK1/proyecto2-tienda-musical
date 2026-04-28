@@ -72,6 +72,67 @@ const crearCliente = async (req, res) => {
   }
 };
 
+const actualizarCliente = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nombre, apellido, telefono, correo } = req.body;
+
+    if (!nombre || !apellido || !telefono || !correo) {
+      return res.status(400).json({
+        ok: false,
+        mensaje: 'Todos los campos son obligatorios.'
+      });
+    }
+
+    const verificarQuery = `
+      SELECT * FROM cliente
+      WHERE id_cliente = $1;
+    `;
+    const verificarResult = await pool.query(verificarQuery, [id]);
+
+    if (verificarResult.rows.length === 0) {
+      return res.status(404).json({
+        ok: false,
+        mensaje: 'El cliente no existe.'
+      });
+    }
+
+    const updateQuery = `
+      UPDATE cliente
+      SET nombre = $1,
+          apellido = $2,
+          telefono = $3,
+          correo = $4
+      WHERE id_cliente = $5
+      RETURNING *;
+    `;
+
+    const values = [nombre, apellido, telefono, correo, id];
+    const result = await pool.query(updateQuery, values);
+
+    res.json({
+      ok: true,
+      mensaje: 'Cliente actualizado correctamente.',
+      cliente: result.rows[0]
+    });
+  } catch (error) {
+    console.error('Error al actualizar cliente:', error);
+
+    if (error.code === '23505') {
+      return res.status(400).json({
+        ok: false,
+        mensaje: 'Ya existe un cliente con ese correo.'
+      });
+    }
+
+    res.status(500).json({
+      ok: false,
+      mensaje: 'Error al actualizar cliente',
+      error: error.message
+    });
+  }
+};
+
 const eliminarCliente = async (req, res) => {
   try {
     const { id } = req.params;
@@ -114,5 +175,6 @@ const eliminarCliente = async (req, res) => {
 module.exports = {
   obtenerClientes,
   crearCliente,
+  actualizarCliente,
   eliminarCliente
 };

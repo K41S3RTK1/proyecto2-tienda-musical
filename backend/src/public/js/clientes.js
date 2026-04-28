@@ -1,3 +1,5 @@
+let clienteEnEdicion = null;
+
 async function cargarClientes() {
   try {
     const respuesta = await fetch('/clientes');
@@ -17,6 +19,7 @@ async function cargarClientes() {
           <td>${cliente.telefono}</td>
           <td>${cliente.correo}</td>
           <td>
+            <button onclick='editarCliente(${JSON.stringify(cliente)})'>Editar</button>
             <button onclick="eliminarCliente(${cliente.id_cliente})">Eliminar</button>
           </td>
         `;
@@ -42,7 +45,30 @@ async function cargarClientes() {
   }
 }
 
-async function crearCliente(event) {
+function editarCliente(cliente) {
+  clienteEnEdicion = cliente.id_cliente;
+
+  document.getElementById('id_cliente').value = cliente.id_cliente;
+  document.getElementById('nombre').value = cliente.nombre;
+  document.getElementById('apellido').value = cliente.apellido;
+  document.getElementById('telefono').value = cliente.telefono;
+  document.getElementById('correo').value = cliente.correo;
+
+  document.getElementById('titulo-formulario').textContent = 'Editar cliente';
+  document.getElementById('btn-guardar').textContent = 'Actualizar cliente';
+  document.getElementById('btn-cancelar').style.display = 'inline-block';
+}
+
+function cancelarEdicion() {
+  clienteEnEdicion = null;
+  document.getElementById('form-cliente').reset();
+  document.getElementById('id_cliente').value = '';
+  document.getElementById('titulo-formulario').textContent = 'Agregar cliente';
+  document.getElementById('btn-guardar').textContent = 'Guardar cliente';
+  document.getElementById('btn-cancelar').style.display = 'none';
+}
+
+async function guardarCliente(event) {
   event.preventDefault();
 
   const mensaje = document.getElementById('mensaje');
@@ -55,8 +81,16 @@ async function crearCliente(event) {
   };
 
   try {
-    const respuesta = await fetch('/clientes', {
-      method: 'POST',
+    let url = '/clientes';
+    let method = 'POST';
+
+    if (clienteEnEdicion) {
+      url = `/clientes/${clienteEnEdicion}`;
+      method = 'PUT';
+    }
+
+    const respuesta = await fetch(url, {
+      method,
       headers: {
         'Content-Type': 'application/json'
       },
@@ -68,15 +102,15 @@ async function crearCliente(event) {
     if (data.ok) {
       mensaje.textContent = data.mensaje;
       mensaje.style.color = 'green';
-      document.getElementById('form-cliente').reset();
+      cancelarEdicion();
       cargarClientes();
     } else {
-      mensaje.textContent = data.mensaje || 'No se pudo crear el cliente.';
+      mensaje.textContent = data.mensaje || 'No se pudo guardar el cliente.';
       mensaje.style.color = 'red';
     }
   } catch (error) {
-    console.error('Error al crear cliente:', error);
-    mensaje.textContent = 'Ocurrió un error al crear el cliente.';
+    console.error('Error al guardar cliente:', error);
+    mensaje.textContent = 'Ocurrió un error al guardar el cliente.';
     mensaje.style.color = 'red';
   }
 }
@@ -112,6 +146,7 @@ async function eliminarCliente(id) {
   }
 }
 
-document.getElementById('form-cliente').addEventListener('submit', crearCliente);
+document.getElementById('form-cliente').addEventListener('submit', guardarCliente);
+document.getElementById('btn-cancelar').addEventListener('click', cancelarEdicion);
 
 cargarClientes();

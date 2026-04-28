@@ -7,38 +7,39 @@
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <h1>Listado de clientes</h1>
+  <div class="container">
+    <h1>Listado de clientes</h1>
 
-  <p><a href="/">Volver al inicio</a></p>
+    <p><a href="/">Volver al inicio</a></p>
 
-  <h2 id="titulo-formulario">Agregar cliente</h2>
+    <h2 id="titulo-formulario">Agregar cliente</h2>
 
-  <form id="form-cliente">
-    <input type="hidden" id="id_cliente">
-    <input type="text" id="nombre" placeholder="Nombre" required>
-    <input type="text" id="apellido" placeholder="Apellido" required>
-    <input type="text" id="telefono" placeholder="Teléfono" required>
-    <input type="email" id="correo" placeholder="Correo" required>
-    <button type="submit" id="btn-guardar">Guardar cliente</button>
-    <button type="button" id="btn-cancelar" style="display: none;">Cancelar edición</button>
-  </form>
+    <form id="form-cliente">
+      <input type="hidden" id="id_cliente">
+      <input type="text" id="nombre" placeholder="Nombre" required>
+      <input type="text" id="apellido" placeholder="Apellido" required>
+      <input type="text" id="telefono" placeholder="Teléfono" required>
+      <input type="email" id="correo" placeholder="Correo" required>
+      <button type="submit" id="btn-guardar">Guardar cliente</button>
+      <button type="button" id="btn-cancelar" style="display: none;">Cancelar edición</button>
+    </form>
 
-  <p id="mensaje"></p>
+    <p id="mensaje"></p>
 
-  <table border="1" cellpadding="10" cellspacing="0" id="tabla-clientes">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Apellido</th>
-        <th>Teléfono</th>
-        <th>Correo</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
+    <table id="tabla-clientes">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Teléfono</th>
+          <th>Correo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
 
   <script src="/js/clientes.js"></script>
 </body>

@@ -7,30 +7,32 @@
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <h1>Registrar venta</h1>
+  <div class="container">
+    <h1>Registrar venta</h1>
 
-  <p><a href="/">Volver al inicio</a></p>
+    <p><a href="/">Volver al inicio</a></p>
 
-  <form id="form-venta">
-    <input type="number" id="id_cliente" placeholder="ID cliente" required>
-    <input type="number" id="id_empleado" placeholder="ID empleado" required>
-    <input type="number" id="id_producto" placeholder="ID producto" required>
-    <input type="number" id="cantidad" placeholder="Cantidad" required>
-    
-    <select id="metodo_pago" required>
-      <option value="">Seleccione método de pago</option>
-      <option value="Efectivo">Efectivo</option>
-      <option value="Tarjeta">Tarjeta</option>
-      <option value="Transferencia">Transferencia</option>
-    </select>
+    <form id="form-venta">
+      <input type="number" id="id_cliente" placeholder="ID cliente" required>
+      <input type="number" id="id_empleado" placeholder="ID empleado" required>
+      <input type="number" id="id_producto" placeholder="ID producto" required>
+      <input type="number" id="cantidad" placeholder="Cantidad" required>
 
-    <button type="submit">Registrar venta</button>
-  </form>
+      <select id="metodo_pago" required>
+        <option value="">Seleccione método de pago</option>
+        <option value="Efectivo">Efectivo</option>
+        <option value="Tarjeta">Tarjeta</option>
+        <option value="Transferencia">Transferencia</option>
+      </select>
 
-  <p id="mensaje"></p>
+      <button type="submit">Registrar venta</button>
+    </form>
 
-  <h2>Último resultado</h2>
-  <pre id="resultado-venta"></pre>
+    <p id="mensaje"></p>
+
+    <h2>Último resultado</h2>
+    <pre id="resultado-venta"></pre>
+  </div>
 
   <script src="/js/ventas.js"></script>
 </body>

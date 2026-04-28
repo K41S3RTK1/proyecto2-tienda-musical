@@ -7,16 +7,34 @@
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <h1>Proyecto 2 - Tienda de Instrumentos Musicales y Equipo de Audio</h1>
-  <p>Bienvenido al sistema.</p>
-  <p>La aplicación web ya está en construcción.</p>
+  <div class="container">
+    <header class="hero">
+      <h1>Proyecto 2</h1>
+      <p class="subtitle">Tienda de Instrumentos Musicales y Equipo de Audio</p>
+    </header>
 
-  <ul>
-    <li><a href="/productos-page">Productos</a></li>
-    <li><a href="/clientes-page">Clientes</a></li>
-    <li><a href="/ventas-page">Ventas</a></li>
-    <li><a href="/reportes-page">Reportes</a></li>
-  </ul>
+    <section class="cards-grid">
+      <a href="/productos-page" class="menu-card">
+        <h2>Productos</h2>
+        <p>Gestiona el catálogo, stock, categorías y proveedores.</p>
+      </a>
+
+      <a href="/clientes-page" class="menu-card">
+        <h2>Clientes</h2>
+        <p>Administra la información de clientes y sus datos de contacto.</p>
+      </a>
+
+      <a href="/ventas-page" class="menu-card">
+        <h2>Ventas</h2>
+        <p>Registra ventas y aplica la lógica transaccional del sistema.</p>
+      </a>
+
+      <a href="/reportes-page" class="menu-card">
+        <h2>Reportes</h2>
+        <p>Consulta reportes y resultados de las consultas SQL del proyecto.</p>
+      </a>
+    </section>
+  </div>
 
   <script src="/js/app.js"></script>
 </body>

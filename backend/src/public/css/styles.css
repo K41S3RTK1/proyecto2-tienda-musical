@@ -75,3 +75,12 @@ button:hover {
   font-weight: bold;
   margin: 15px 0;
 }
+
+section {
+  margin-bottom: 40px;
+}
+
+h2 {
+  margin-top: 30px;
+  color: #16306d;
+}

@@ -3,6 +3,7 @@ const path = require('path');
 const pool = require('./config/db');
 const productosRoutes = require('./routes/productos.routes');
 const clientesRoutes = require('./routes/clientes.routes');
+const reportesRoutes = require('./routes/reportes.routes');
 require('dotenv').config({ path: path.join(__dirname, '../../.env') });
 
 const app = express();
@@ -22,6 +23,10 @@ app.get('/productos-page', (req, res) => {
 
 app.get('/clientes-page', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'clientes.html'));
+});
+
+app.get('/reportes-page', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'reportes.html'));
 });
 
 app.get('/test-db', async (req, res) => {
@@ -44,6 +49,7 @@ app.get('/test-db', async (req, res) => {
 
 app.use('/productos', productosRoutes);
 app.use('/clientes', clientesRoutes);
+app.use('/reportes', reportesRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);

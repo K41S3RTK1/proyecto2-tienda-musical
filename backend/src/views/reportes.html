@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reportes - Tienda Musical</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <h1>Reportes del sistema</h1>
+
+  <p><a href="/">Volver al inicio</a></p>
+
+  <section>
+    <h2>Ventas por categoría</h2>
+    <table id="tabla-categorias">
+      <thead>
+        <tr>
+          <th>Categoría</th>
+          <th>Total vendido</th>
+          <th>Cantidad de detalles</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Productos más vendidos</h2>
+    <table id="tabla-productos-vendidos">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Producto</th>
+          <th>Unidades vendidas</th>
+          <th>Ingreso total</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Ventas mayores al promedio</h2>
+    <table id="tabla-ventas-altas">
+      <thead>
+        <tr>
+          <th>ID Venta</th>
+          <th>Cliente</th>
+          <th>Total</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Reporte de ventas desde la VIEW</h2>
+    <table id="tabla-vista-ventas">
+      <thead>
+        <tr>
+          <th>ID Venta</th>
+          <th>Fecha</th>
+          <th>Cliente</th>
+          <th>Empleado</th>
+          <th>Método de pago</th>
+          <th>Estado</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <script src="/js/reportes.js"></script>
+</body>
+</html>
